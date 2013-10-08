@@ -38,12 +38,15 @@ class Woot_Library
 	 * Returns the event post (if one can be found) relating to the specified product,
 	 * otherwise it returns boolean false.
 	 *
-	 * @param $product should be a valid WooCommerce product object
+	 * @param mixed $product should be a valid WooCommerce product object or integer post ID
 	 * @return bool|WP_Post
 	 */
 	public static function get_event_from_product($product) {
 		// Ensure we've got a product object we can work with/check if it was loaded already
-		if (!is_object($product) || !isset($product->id)) return false;
+		if (self::could_be_post_id($product)) $product_id = $product;
+		if (is_object($product) && isset($product->id)) $product_id = $product->id;
+
+		if (!isset($product_id)) return false;
 		if (isset(self::$events[$product->id])) return self::$events[$product->id];
 
 		// Is an event related to the product?
@@ -67,26 +70,35 @@ class Woot_Library
 	 * Returns an array of any products (representing tickets) linked to a specific
 	 * event or, if none can be found, boolean false.
 	 *
-	 * @param $event
+	 * @param $event WP_Post object for an event or integer post ID
 	 * @return bool|array (array of WP_Post objects)
 	 */
 	public static function get_products_from_event($event) {
 		// Ensure we've got an event object we can work with/check if it was loaded already
-		if (!is_object($event) || !isset($event->ID)) return false;
-		if (isset(self::$products[$event->ID])) return self::$products[$event->ID];
+		if (self::could_be_post_id($event)) $event_id = $event;
+		elseif (is_object($event) && isset($event->ID)) $event_id = $event->ID;
+
+		if (!isset($event_id)) return false;
+		if (isset(self::$products[$event_id])) return self::$products[$event_id];
 
 		// Are any products related to the event?
 		$products = get_posts(array(
 			'post_type' => 'product',
 			'meta_key' => self::PRODUCT_TO_EVENT,
-			'meta_value' => $event->ID
+			'meta_value' => $event_id
 		));
 
 		wp_reset_postdata();
 		if (empty($products) || !is_array($products)) return false;
 
 		// Save the products for re-use then return
-		self::$products[$event->ID] = $products;
+		self::$products[$event_id] = $products;
 		return $products;
+	}
+
+
+	protected function could_be_post_id($value) {
+		$cast_version = absint($value);
+		return ($cast_version == $value);
 	}
 }
