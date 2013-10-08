@@ -1,3 +1,4 @@
-== Woot Library
+Woot Library
+============
 
-** Helpers for WooCommerce Tickets **
+* Helpers for WooCommerce Tickets *
