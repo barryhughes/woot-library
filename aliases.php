@@ -9,7 +9,7 @@
  * @param $product mixed int|object = null
  * @return bool|WP_Post
  */
-function woot_get_events($product = null) {
+function woot_get_event($product = null) {
 	if (null === $product) $product = get_the_ID();
 	return Woot_Library::get_event_from_product($product);
 }
