@@ -1,4 +1,0 @@
-woot-library
-============
-
-Woot Library
