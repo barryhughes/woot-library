@@ -80,23 +80,35 @@ class Woot_Library
 	 * @return bool
 	 */
 	public static function has_sold_out($event) {
+		$inventory = self::total_inventory_for_event($event);
+		return (0 == $inventory);
+	}
+
+
+	/**
+	 * Returns the ticket inventory for the specified event. Note that an event with no
+	 * associated ticket products will return 0, as will an event that *does* have associated
+	 * ticket products but has simply sold out.
+	 *
+	 * @param $event
+	 * @return int
+	 */
+	public static function total_inventory_for_event($event) {
 		// We need to load products as products here, but can temporarily change the setting to suit
 		$load_as_products_setting = self::$load_products_as_products;
 		self::$load_products_as_products = true;
 
 		// Load the products!
 		$products = self::get_onsale_products_from_event($event);
-		if (false === $products) return false;
+		if (false === $products) return 0;
 
 		// Check our inventory levels
 		$inventory = 0;
 		foreach ($products as $product)	$inventory += $product->get_stock_quantity();
 
-		// Restore the load products as products setting
+		// Restore the load products as products setting then return inventory level
 		self::$load_products_as_products = $load_as_products_setting;
-
-		// Result
-		return (0 === $inventory);
+		return absint($inventory);
 	}
 
 

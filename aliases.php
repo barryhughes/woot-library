@@ -1,21 +1,30 @@
 <?php
 /**
  * Determines if tickets for the current or specified event have sold out.
- * Note that this will return true if they have indeed sold out.
  *
- * Do note however that this function will return false not only if tickets
- * are still in stock but also if there are no tickets associated with the
- * event whatsoever. For that reason, if your are testing for a negative
- * result (ie to display a "still in stock" message you may wish to combine
- * this function with woot_currently_has_tickets() ... or else use
- * woot_has_tickets_for_sale().
+ * Note that an event that does not have any associated ticket products will
+ * return false, since it is not available for sale in any case.
  *
  * @param mixed $event int|object = null
  * @return bool
  */
 function woot_has_soldout($event = null) {
 	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
-	return Woot_Library::has_sold_out($event);
+	return (Woot_Library::has_sold_out($event) && woot_has_tickets($event));
+}
+
+/**
+ * Checks if the current or specified events ticket stock levels are below or
+ * equal to the threshold level (defaults to 10).
+ *
+ * @param int $threshold = 10
+ * @param mixed $event int|object = null
+ * @return bool
+ */
+function woot_low_stock($threshold = 10, $event = null) {
+	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
+	$levels = Woot_Library::total_inventory_for_event($event);
+	return ($levels <= $threshold && woot_has_tickets($event));
 }
 
 /**
@@ -70,6 +79,22 @@ function woot_get_event($product = null) {
  * explicitly be specified as either a post ID or object or else not be
  * supplied, and the current post in the loop will be assumed).
  *
+ * Alias for woot_get_products().
+ *
+ * @param bool $onsale = true
+ * @param mixed $event = null int|object
+ * @return bool|array
+ * @see woot_get_products()
+ */
+function woot_get_tickets($onsale = true, $event = null) {
+	return woot_get_products($onsale, $event);
+}
+
+/**
+ * Returns ticket products associated with the current event (this can
+ * explicitly be specified as either a post ID or object or else not be
+ * supplied, and the current post in the loop will be assumed).
+ *
  * If as by default optional param $onsale is set to true then only those
  * products currently on sale will be returned. This can however be set
  * to false in order to retrieve all tickets, both those that are no longer
@@ -87,18 +112,3 @@ function woot_get_products($onsale = true, $event = null) {
 	else return Woot_Library::get_products_from_event($event);
 }
 
-/**
- * Returns ticket products associated with the current event (this can
- * explicitly be specified as either a post ID or object or else not be
- * supplied, and the current post in the loop will be assumed).
- *
- * Alias for woot_get_products().
- *
- * @param bool $onsale = true
- * @param mixed $event = null int|object
- * @return bool|array
- * @see woot_get_products()
- */
-function woot_get_tickets($onsale = true, $event = null) {
-	return woot_get_products($onsale, $event);
-}
