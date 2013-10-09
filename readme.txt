@@ -22,7 +22,9 @@ customization, such as (but not limited to!):
 * Placing the event title in the shopping cart
 * Pulling event details into catalog views
 
-Dramatic, eh?
+Dramatic, eh? Recipes for various tasks can be found
+[on the project wiki](https://github.com/barryhughes/woot-library/wiki)
+for those wanting some hints as to how to use this thang.
 
 == Installation ==
 
@@ -40,6 +42,12 @@ No screenshots, sorry! This plugin is merely a library of functions.
 
 By itself, nothing. It simply provides a number of "helpers" to let people selling tickets with WooCommerce Tickets
 build customizations just a little more easily than is normally possible.
+
+= How on earth do I use it? =
+
+Please go ahead and
+[visit the project wiki](https://github.com/barryhughes/woot-library/wiki) -
+this has a number of recipes to get you started and I will add more as time permits / in line with requests :-)
 
 = How can I request a new helper? =
 
