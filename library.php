@@ -69,6 +69,38 @@ class Woot_Library
 
 
 	/**
+	 * If the event has associated tickets that ought to be available for sale, but have
+	 * run out of inventory, this function returns true.
+	 *
+	 * It does not assess tickets that are not currently onsale (ie we are outwith their
+	 * selling date range). Note also that a negative result does not guarantee that there
+	 * are indeed any associated products.
+	 *
+	 * @param $event
+	 * @return bool
+	 */
+	public static function has_sold_out($event) {
+		// We need to load products as products here, but can temporarily change the setting to suit
+		$load_as_products_setting = self::$load_products_as_products;
+		self::$load_products_as_products = true;
+
+		// Load the products!
+		$products = self::get_onsale_products_from_event($event);
+		if (false === $products) return false;
+
+		// Check our inventory levels
+		$inventory = 0;
+		foreach ($products as $product)	$inventory += $product->get_stock_quantity();
+
+		// Restore the load products as products setting
+		self::$load_products_as_products = $load_as_products_setting;
+
+		// Result
+		return (0 === $inventory);
+	}
+
+
+	/**
 	 * Returns an array of any products (representing tickets) which are currently
 	 * on sale and linked the specified event or, if none can be found, boolean false.
 	 *
