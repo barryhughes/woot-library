@@ -120,6 +120,12 @@ function woot_get_event_time($product = null, $format = '') {
 	else return tribe_get_start_date($event, false, ' ' . $format);
 }
 
+function woot_get_event_title($product = null) {
+	$event = woot_get_event($product);
+	if (false === $event) return false;
+	return apply_filters('the_title', $event->post_title, $event->ID);
+}
+
 /**
  * Returns ticket products associated with the current event (this can
  * explicitly be specified as either a post ID or object or else not be

@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/barryhughes/woot-library
  * Description: Simple helper library - to help you build customizations relating to your WooCommerce Tickets powered website.
  * Author: Barry Hughes
- * Version: 1.1
+ * Version: 1.2
  * Author URI: http://codingkills.me
  */
 
