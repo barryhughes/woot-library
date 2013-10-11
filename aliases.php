@@ -60,6 +60,16 @@ function woot_currently_has_tickets($event = null) {
 }
 
 /**
+ * Determines if the current or specified product functions as an event ticket.
+ *
+ * @param null $product
+ * @return bool
+ */
+function woot_is_event_ticket($product = null) {
+	return (false === woot_get_event($product)) ? false : true;
+}
+
+/**
  * Returns the event associated with the current product (this can explicitly
  * be specified as either a post ID or object or else not be supplied, and
  * the current post in the loop will be assumed).
@@ -72,6 +82,42 @@ function woot_currently_has_tickets($event = null) {
 function woot_get_event($product = null) {
 	if (null === $product) $product = get_the_ID();
 	return Woot_Library::get_event_from_product($product);
+}
+
+/**
+ * Returns the event start date associated with the current product (or a
+ * specific product ID/object can be explicitly passed in). It varies from
+ * tribe_get_event_date() in that it will by default return that date only
+ * and not the time (but see woot_get_event_time()).
+ *
+ * A specific date format string can optionally be passed.
+ *
+ * @param null $product
+ * @param string $format
+ * @return bool|string
+ */
+function woot_get_event_date($product = null, $format = '') {
+	$event = woot_get_event($product);
+	if (false === $event) return false;
+	return tribe_get_start_date($event, false, $format);
+}
+
+/**
+ * Returns the event start time associated with the current product (or a
+ * specific product ID/object can be explicitly passed in).
+ *
+ * A specific date format string can optionally be passed if there's a need
+ * to deviate from the default format.
+ *
+ * @param null $product
+ * @param string $format
+ * @return bool|string
+ */
+function woot_get_event_time($product = null, $format = '') {
+	$event = woot_get_event($product);
+	if (false === $event) return false;
+	if (empty($format)) return tribe_get_start_date($event, true, ' ');
+	else return tribe_get_start_date($event, false, ' ' . $format);
 }
 
 /**
