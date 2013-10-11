@@ -5,7 +5,7 @@ Tags: tickets, events, customize, helper library
 Donate link: http://www.britishlegion.org.uk/support-us
 Requires at least: 3.6
 Tested up to: 3.6.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
