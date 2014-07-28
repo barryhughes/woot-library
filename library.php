@@ -43,7 +43,7 @@ class Woot_Library
 	 * @param mixed $product should be a valid WooCommerce product object or integer post ID
 	 * @return bool|WP_Post
 	 */
-	public static function get_event_from_product($product) {
+	public static function get_event_from_product( $product ) {
 		// Ensure we've got a product object we can work with/check if it was loaded already
 		if ( self::could_be_post_id( $product ) ) $product_id = $product;
 		if ( is_object( $product ) && isset( $product->id ) ) $product_id = $product->id;
@@ -79,9 +79,9 @@ class Woot_Library
 	 * @param $event
 	 * @return bool
 	 */
-	public static function has_sold_out($event) {
-		$inventory = self::total_inventory_for_event($event);
-		return (0 == $inventory);
+	public static function has_sold_out( $event ) {
+		$inventory = self::total_inventory_for_event( $event );
+		return ( 0 == $inventory );
 	}
 
 
@@ -93,14 +93,14 @@ class Woot_Library
 	 * @param $event
 	 * @return int
 	 */
-	public static function total_inventory_for_event($event) {
+	public static function total_inventory_for_event( $event ) {
 		// We need to load products as products here, but can temporarily change the setting to suit
 		$load_as_products_setting = self::$load_products_as_products;
 		self::$load_products_as_products = true;
 
 		// Load the products!
-		$products = self::get_onsale_products_from_event($event);
-		if (false === $products) return 0;
+		$products = self::get_onsale_products_from_event( $event );
+		if ( false === $products ) return 0;
 
 		// Check our inventory levels
 		$inventory = 0;
@@ -108,7 +108,7 @@ class Woot_Library
 
 		// Restore the load products as products setting then return inventory level
 		self::$load_products_as_products = $load_as_products_setting;
-		return absint($inventory);
+		return absint( $inventory );
 	}
 
 
@@ -119,25 +119,25 @@ class Woot_Library
 	 * @param $event WP_Post object for an event or integer post ID
 	 * @return bool|array (array of WP_Post objects)
 	 */
-	public static function get_onsale_products_from_event($event) {
+	public static function get_onsale_products_from_event( $event ) {
 		// Load the products!
-		$products = self::get_products_from_event($event);
-		if (false === $products) return false;
+		$products = self::get_products_from_event( $event );
+		if ( false === $products ) return false;
 
 		// Revise the list so we only have those currently on sale
 		$revised_list = array();
-		$now = date('Y-m-d H:i:s');
+		$now = date( 'Y-m-d H:i:s' );
 
 		foreach ($products as $product) {
-			$start = get_post_meta($product->id, '_ticket_start_date', true);
-			$end = get_post_meta($product->id, '_ticket_end_date', true);
+			$start = get_post_meta( $product->id, '_ticket_start_date', true );
+			$end = get_post_meta( $product->id, '_ticket_end_date', true );
 
-			if (empty($start) || empty($end)) continue;
-			if ($start <= $now && $end >= $now) $revised_list[] = $product;
+			if ( empty( $start ) || empty( $end ) ) continue;
+			if ( $start <= $now && $end >= $now ) $revised_list[] = $product;
 		}
 
 		// Return false if none were found or else return the revised list
-		return (0 === count($revised_list)) ? false : $revised_list;
+		return ( 0 === count( $revised_list ) ) ? false : $revised_list;
 	}
 
 
@@ -148,26 +148,26 @@ class Woot_Library
 	 * @param $event WP_Post object for an event or integer post ID
 	 * @return bool|array (array of WP_Post objects)
 	 */
-	public static function get_products_from_event($event) {
+	public static function get_products_from_event( $event ) {
 		// Ensure we've got an event object we can work with/check if it was loaded already
-		if (self::could_be_post_id($event)) $event_id = $event;
-		elseif (is_object($event) && isset($event->ID)) $event_id = $event->ID;
+		if ( self::could_be_post_id( $event ) ) $event_id = $event;
+		elseif ( is_object( $event ) && isset( $event->ID ) ) $event_id = $event->ID;
 
-		if (!isset($event_id)) return false;
-		if (isset(self::$products[$event_id])) return self::$products[$event_id];
+		if ( ! isset( $event_id ) ) return false;
+		if ( isset( self::$products[$event_id] ) ) return self::$products[$event_id];
 
 		// Are any products related to the event?
-		$products = get_posts(array(
+		$products = get_posts( array(
 			'post_type' => 'product',
 			'meta_key' => self::PRODUCT_TO_EVENT,
 			'meta_value' => $event_id
-		));
+		) );
 
 		wp_reset_postdata();
-		if (empty($products) || !is_array($products)) return false;
+		if ( empty( $products ) || ! is_array( $products ) ) return false;
 
 		// Convert into product objects?
-		if (self::$load_products_as_products) self::productify($products);
+		if ( self::$load_products_as_products ) self::productify( $products );
 
 		// Save the products for re-use then return
 		self::$products[$event_id] = $products;
@@ -181,9 +181,9 @@ class Woot_Library
 	 * @param $value
 	 * @return bool
 	 */
-	protected static function could_be_post_id($value) {
-		$cast_version = absint($value);
-		return ($cast_version == $value);
+	protected static function could_be_post_id( $value ) {
+		$cast_version = absint( $value );
+		return ( $cast_version == $value );
 	}
 
 
@@ -196,7 +196,7 @@ class Woot_Library
 	 *
 	 * @param array &$posts WP_Post objects
 	 */
-	protected static function productify(array &$posts) {
-		foreach ($posts as &$post) $post = get_product($post);
+	protected static function productify( array &$posts ) {
+		foreach ( $posts as &$post ) $post = get_product( $post );
 	}
 }
