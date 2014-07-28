@@ -182,7 +182,8 @@ class Woot_Library
 	 * @return bool
 	 */
 	protected static function could_be_post_id( $value ) {
-		$cast_version = absint( $value );
+        if ( ! is_numeric( $value ) ) return false;
+        $cast_version = absint( $value );
 		return ( $cast_version == $value );
 	}
 
