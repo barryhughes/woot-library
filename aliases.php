@@ -8,9 +8,9 @@
  * @param mixed $event int|object = null
  * @return bool
  */
-function woot_has_soldout($event = null) {
-	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
-	return (Woot_Library::has_sold_out($event) && woot_has_tickets($event));
+function woot_has_soldout( $event = null ) {
+	if ( null === $event ) $event = TribeEvents::instance()->postIdHelper();
+	return ( Woot_Library::has_sold_out( $event ) && woot_has_tickets( $event ) );
 }
 
 /**
@@ -21,10 +21,10 @@ function woot_has_soldout($event = null) {
  * @param mixed $event int|object = null
  * @return bool
  */
-function woot_low_stock($threshold = 10, $event = null) {
-	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
-	$levels = Woot_Library::total_inventory_for_event($event);
-	return ($levels <= $threshold && woot_has_tickets($event));
+function woot_low_stock( $threshold = 10, $event = null ) {
+	if ( null === $event ) $event = TribeEvents::instance()->postIdHelper();
+	$levels = Woot_Library::total_inventory_for_event( $event );
+	return ( $levels <= $threshold && woot_has_tickets( $event ) );
 }
 
 /**
@@ -38,10 +38,10 @@ function woot_low_stock($threshold = 10, $event = null) {
  * @param mixed $event int|object = null
  * @return false
  */
-function woot_has_tickets($event = null) {
-	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
-	$tickets = woot_get_products(true, $event);
-	return (false === $tickets) ? false : (1 <= count($tickets));
+function woot_has_tickets( $event = null ) {
+	if ( null === $event ) $event = TribeEvents::instance()->postIdHelper();
+	$tickets = woot_get_products( true, $event );
+	return ( false === $tickets ) ? false : ( 1 <= count( $tickets ) );
 }
 
 /**
@@ -53,10 +53,10 @@ function woot_has_tickets($event = null) {
  * @param mixed $event int|object = null
  * @return false
  */
-function woot_currently_has_tickets($event = null) {
-	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
-	$tickets = woot_get_products(false, $event);
-	return (false === $tickets) ? false : (1 <= count($tickets));
+function woot_currently_has_tickets( $event = null ) {
+	if ( null === $event ) $event = TribeEvents::instance()->postIdHelper();
+	$tickets = woot_get_products( false, $event );
+	return ( false === $tickets ) ? false : ( 1 <= count( $tickets ) );
 }
 
 /**
@@ -65,8 +65,8 @@ function woot_currently_has_tickets($event = null) {
  * @param null $product
  * @return bool
  */
-function woot_is_event_ticket($product = null) {
-	return (false === woot_get_event($product)) ? false : true;
+function woot_is_event_ticket( $product = null ) {
+	return ( false === woot_get_event( $product ) ) ? false : true;
 }
 
 /**
@@ -79,9 +79,9 @@ function woot_is_event_ticket($product = null) {
  * @param $product mixed int|object = null
  * @return bool|WP_Post
  */
-function woot_get_event($product = null) {
-	if (null === $product) $product = get_the_ID();
-	return Woot_Library::get_event_from_product($product);
+function woot_get_event( $product = null ) {
+	if ( null === $product ) $product = get_the_ID();
+	return Woot_Library::get_event_from_product( $product );
 }
 
 /**
@@ -96,10 +96,10 @@ function woot_get_event($product = null) {
  * @param string $format
  * @return bool|string
  */
-function woot_get_event_date($product = null, $format = '') {
-	$event = woot_get_event($product);
-	if (false === $event) return false;
-	return tribe_get_start_date($event, false, $format);
+function woot_get_event_date( $product = null, $format = '' ) {
+	$event = woot_get_event( $product );
+	if ( false === $event ) return false;
+	return tribe_get_start_date( $event, false, $format );
 }
 
 /**
@@ -113,17 +113,17 @@ function woot_get_event_date($product = null, $format = '') {
  * @param string $format
  * @return bool|string
  */
-function woot_get_event_time($product = null, $format = '') {
-	$event = woot_get_event($product);
-	if (false === $event) return false;
-	if (empty($format)) return tribe_get_start_date($event, true, ' ');
-	else return tribe_get_start_date($event, false, ' ' . $format);
+function woot_get_event_time( $product = null, $format = '' ) {
+	$event = woot_get_event( $product );
+	if ( false === $event ) return false;
+	if ( empty( $format ) ) return tribe_get_start_date( $event, true, ' ' );
+	else return tribe_get_start_date( $event, false, ' ' . $format );
 }
 
-function woot_get_event_title($product = null) {
-	$event = woot_get_event($product);
-	if (false === $event) return false;
-	return apply_filters('the_title', $event->post_title, $event->ID);
+function woot_get_event_title( $product = null ) {
+	$event = woot_get_event( $product );
+	if ( false === $event ) return false;
+	return apply_filters( 'the_title', $event->post_title, $event->ID );
 }
 
 /**
@@ -138,8 +138,8 @@ function woot_get_event_title($product = null) {
  * @return bool|array
  * @see woot_get_products()
  */
-function woot_get_tickets($onsale = true, $event = null) {
-	return woot_get_products($onsale, $event);
+function woot_get_tickets( $onsale = true, $event = null ) {
+	return woot_get_products( $onsale, $event );
 }
 
 /**
@@ -158,9 +158,9 @@ function woot_get_tickets($onsale = true, $event = null) {
  * @param mixed $event = null int|object
  * @return bool|array
  */
-function woot_get_products($onsale = true, $event = null) {
-	if (null === $event) $event = TribeEvents::instance()->postIdHelper();
-	if ($onsale) return Woot_Library::get_onsale_products_from_event($event);
-	else return Woot_Library::get_products_from_event($event);
+function woot_get_products( $onsale = true, $event = null ) {
+	if ( null === $event ) $event = TribeEvents::instance()->postIdHelper();
+	if ( $onsale ) return Woot_Library::get_onsale_products_from_event( $event );
+	else return Woot_Library::get_products_from_event( $event );
 }
 
