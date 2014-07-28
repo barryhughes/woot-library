@@ -5,7 +5,7 @@ Tags: tickets, events, customize, helper library
 Donate link: http://www.britishlegion.org.uk/support-us
 Requires at least: 3.6
 Tested up to: 3.6.1
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,6 +69,9 @@ This version of the plugin is built for compatibility with:
 
 == Changelog ==
 
-= 1.0 =
+= 1.3 =
+* Fix issue with loader
+* Fix issue with product ID/object detection
 
+= 1.0 =
 * Initial release
