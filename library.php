@@ -45,21 +45,21 @@ class Woot_Library
 	 */
 	public static function get_event_from_product($product) {
 		// Ensure we've got a product object we can work with/check if it was loaded already
-		if (self::could_be_post_id($product)) $product_id = $product;
-		if (is_object($product) && isset($product->id)) $product_id = $product->id;
+		if ( self::could_be_post_id( $product ) ) $product_id = $product;
+		if ( is_object( $product ) && isset( $product->id ) ) $product_id = $product->id;
 
-		if (!isset($product_id)) return false;
-		if (isset(self::$events[$product->id])) return self::$events[$product->id];
+		if ( ! isset( $product_id ) ) return false;
+		if ( isset( self::$events[$product->id] ) ) return self::$events[$product->id];
 
 		// Is an event related to the product?
-		$event_id = get_post_meta($product->id, self::PRODUCT_TO_EVENT, true);
-		if (empty($event_id)) return false;
+		$event_id = get_post_meta( $product->id, self::PRODUCT_TO_EVENT, true );
+		if ( empty( $event_id ) ) return false;
 
 		// Load the event
-		$events = tribe_get_events(array('p' => $event_id));
+		$events = tribe_get_events( array( 'p' => $event_id ) );
 		wp_reset_postdata();
 
-		if (1 !== count($events) || !isset($events[0])) return false;
+		if ( 1 !== count( $events ) || ! isset( $events[0] ) ) return false;
 		$event = $events[0];
 
 		// Save the event for re-use then return
