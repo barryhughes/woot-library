@@ -1,6 +1,9 @@
 Woot Library
 ============
 
+> As of The Events Calendar's 3.8 release, this plugin is obsolete! Please use the API functions/template tags
+> bundled with that plugin instead of this library.
+
 A simple WordPress plugin that delivers a number of helper functions for those folks building sites and selling tickets
 using a trio of:
 
@@ -16,5 +19,6 @@ found and fixed, or new helpers are added, you need only update the latest versi
 Grab a copy
 -----------
 
-You can obtain this [from the WordPress plugin directory](http://wordpress.org/plugins/woot-library/) (recommended,
-since that will facilitate automated updates) or else download a release zip here on the GitHub repo.
+You can obtain this [from the WordPress plugin directory](http://wordpress.org/plugins/woot-library/) -(recommended,
+since that will facilitate automated updates) or else download a release zip here on the GitHub repo.- however if you
+are using an up-to-date copy of The Events Calendar *this plugin is no longer required and I advise you do not use it.*
