@@ -19,6 +19,6 @@ found and fixed, or new helpers are added, you need only update the latest versi
 Grab a copy
 -----------
 
-You can obtain this [from the WordPress plugin directory](http://wordpress.org/plugins/woot-library/) -(recommended,
-since that will facilitate automated updates) or else download a release zip here on the GitHub repo.- however if you
+You can obtain this [from the WordPress plugin directory](http://wordpress.org/plugins/woot-library/) ~~(recommended,
+since that will facilitate automated updates) or else download a release zip here on the GitHub repo.~~ however if you
 are using an up-to-date copy of The Events Calendar *this plugin is no longer required and I advise you do not use it.*
